@@ -4,7 +4,7 @@
     <!-- Session Status -->
 {{--    <x-auth-session-status class="text-center" :status="session('status')" />--}}
 
-    <form wire:submit="login" class="flex flex-col gap-6">
+    <form wire:submit="createReservation" class="flex flex-col gap-6">
         <!-- Guests count -->
         <flux:input
             wire:model="guests"
@@ -17,7 +17,10 @@
         <flux:field>
             <flux:label>{{__('Select a date')}}</flux:label>
             <div x-data="datepicker({
-                state:  $wire.entangle('date')
+                state:  $wire.entangle('date'),
+                minDate: @js(today()),
+                maxDate: @js(today()->addDays(config('app.reservation_max_days'))),
+                disabledDates: @js($this->getDisabledDates())
             })"
             class="w-full"
             ></div>
