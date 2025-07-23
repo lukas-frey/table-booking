@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Reservations\CreateReservation;
+use App\Livewire\Reservations\ReservationSuccessPrompt;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
@@ -15,9 +16,16 @@ Route::view('dashboard', 'dashboard')
     ->name('dashboard')
 ;
 
-Route::get('reservations/create', CreateReservation::class)
-    ->middleware(['auth', 'verified'])
-    ->name('reservations.create')
+Route::middleware(['auth', 'verified'])
+    ->group(function () {
+        Route::get('reservations/create', CreateReservation::class)
+            ->name('reservations.create')
+        ;
+
+        Route::get('reservations/thank-you', ReservationSuccessPrompt::class)
+            ->name('reservations.success')
+        ;
+    })
 ;
 
 Route::middleware(['auth'])->group(function () {
