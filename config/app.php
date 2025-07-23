@@ -123,4 +123,46 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Restaurant Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Restaurant specific options are available here
+    |
+    */
+
+    /*
+     * Defines how many tables the restaurant has available.
+     * We assume each table has the same fixed amount of seats available.
+     */
+    'max_tables' => 20,
+    'seats_per_table' => 4,
+
+    /*
+     * We can configure the opening hours of the restaurant here.
+     * Value needs to be a time range in the format [HH:MM]-[HH:MM]
+     * or null if the restaurant is closed that day.
+     * Multiple ranges per day are not supported.
+     */
+    'schedule' => [
+        'monday' => '11:00-23:00',
+        'tuesday' => '11:00-23:00',
+        'wednesday' => '11:00-23:00',
+        'thursday' => '11:00-23:00',
+        'friday' => '11:00-24:00',
+        'saturday' => '11:30-24:00',
+        'sunday' => null,
+    ],
+
+    /*
+     * The duration (in hours) of each reservation.
+     */
+    'reservation_duration' => 2,
+
+    /*
+     * This determines how many days into the future we can make a reservation.
+     */
+    'reservation_max_days' => 40,
+
 ];
