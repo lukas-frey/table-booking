@@ -22,7 +22,7 @@ Route::middleware(['auth', 'verified'])
             ->name('reservations.create')
         ;
 
-        Route::get('reservations/thank-you', ReservationSuccessPrompt::class)
+        Route::get('reservations/{reservation}/thank-you', ReservationSuccessPrompt::class)
             ->name('reservations.success')
         ;
     })
