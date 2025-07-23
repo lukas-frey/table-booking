@@ -33,7 +33,7 @@ class ReservationService
     /**
      * Get all unavailable dates for the reservable time range.
      */
-    public function getUnavailableDates(bool $asCarbon = true): Collection
+    public function getUnavailableDates(): Collection
     {
         $result = collect();
         $period = CarbonPeriod::create($this->startDate, '1 day', $this->endDate);
@@ -44,15 +44,13 @@ class ReservationService
 
             // No schedule for this day or set to null = closed
             if ($schedule === null) {
-                $result->push($date);
+                $result->push($date->toDateString());
             } elseif ($this->getAvailableTimeSlotsForDate($date)->isEmpty()) {
-                $result->push($date);
+                $result->push($date->toDateString());
             }
         }
 
-        return $asCarbon
-            ? $result
-            : $result->map(fn (Carbon $date) => $date->toDateString());
+        return $result;
     }
 
     /**

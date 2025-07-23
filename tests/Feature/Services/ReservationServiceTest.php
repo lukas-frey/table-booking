@@ -49,7 +49,7 @@ it('has no unavailable dates when open daily and no reservations made', function
 it('has unavailable dates when not open daily', function () {
     $service = app(ReservationService::class);
 
-    $unavailableDates = $service->getUnavailableDates(false);
+    $unavailableDates = $service->getUnavailableDates();
 
     expect($unavailableDates)->not->toBeEmpty();
     expect($unavailableDates)->toHaveCount(2);
@@ -74,7 +74,7 @@ it('has unavailable dates when open daily and has fully booked dates', function 
         )
     ;
 
-    $unavailableDates = $service->getUnavailableDates(false);
+    $unavailableDates = $service->getUnavailableDates();
 
     expect($unavailableDates)->not->toBeEmpty();
     expect($unavailableDates)->toHaveCount(3);
