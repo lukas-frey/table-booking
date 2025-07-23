@@ -4,6 +4,7 @@ namespace App\Livewire\Reservations;
 
 use App\Models\Reservation;
 use App\Services\ReservationService;
+use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Rule;
@@ -15,7 +16,7 @@ class CreateReservation extends Component
 {
     public int $guests = 2;
 
-    public ?string $date = null;
+    public ?\Illuminate\Support\Carbon $date = null;
 
     public ?string $time = null;
 
@@ -36,6 +37,11 @@ class CreateReservation extends Component
             ],
             'time' => 'required|string|max:5',
         ];
+    }
+
+    public function updatingDate(?\Illuminate\Support\Carbon &$value): void
+    {
+        $value = $value?->setTimezone('Europe/Prague');
     }
 
     public function createReservation(): void
@@ -64,11 +70,18 @@ class CreateReservation extends Component
                 'reservation' => $reservation,
             ]));
         }
-
     }
 
     protected function getDisabledDates(): Collection
     {
         return app(ReservationService::class)->getUnavailableDates();
+    }
+
+    protected function getAvailableTimeSlotsForSelectedDate(): Collection
+    {
+        return $this->date
+            ? app(ReservationService::class)
+                ->getAvailableTimeSlotsForDate(Carbon::parse($this->date))
+            : collect();
     }
 }

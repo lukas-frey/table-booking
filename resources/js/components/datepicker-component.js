@@ -18,7 +18,7 @@ export default ({
             maxDate: maxDate,
 
             onSelect: ({date}) => {
-                this.state = date
+                    this.state = date ?? null
             },
 
             onRenderCell: ({date, cellType}) => {
