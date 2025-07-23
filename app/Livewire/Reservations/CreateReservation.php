@@ -4,8 +4,8 @@ namespace App\Livewire\Reservations;
 
 use App\Models\Reservation;
 use App\Services\ReservationService;
-use Carbon\Carbon;
 use Carbon\CarbonImmutable;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Layout;
@@ -16,7 +16,7 @@ class CreateReservation extends Component
 {
     public int $guests = 2;
 
-    public ?\Illuminate\Support\Carbon $date = null;
+    public ?Carbon $date = null;
 
     public ?string $time = null;
 
@@ -39,7 +39,7 @@ class CreateReservation extends Component
         ];
     }
 
-    public function updatingDate(?\Illuminate\Support\Carbon &$value): void
+    public function updatingDate(?Carbon &$value): void
     {
         $value = $value?->setTimezone('Europe/Prague');
     }
@@ -54,6 +54,8 @@ class CreateReservation extends Component
 
         // Check if the reservation is still valid
         if (! app(ReservationService::class)->isTableAvailable($startsAt, $endsAt)) {
+            $this->addError('time', __('Your selected date and time is not available.'));
+
             return;
         }
 

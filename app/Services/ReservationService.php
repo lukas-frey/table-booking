@@ -93,7 +93,10 @@ class ReservationService
         return collect();
     }
 
-    public function getAvailableTimeSlotsForDate(CarbonInterface $date, string $period = '30 minutes'): Collection
+    /**
+     * Get all available time slots for the specified date based on the restaurant's schedule.
+     */
+    public function getAvailableTimeSlotsForDate(CarbonInterface $date): Collection
     {
         $availableSlots = collect();
         $reservations = $this->getReservations();
@@ -101,6 +104,11 @@ class ReservationService
         foreach ($this->getTimeSlotsForDate($date) as $slot) {
             $slotStart = $date->copy()->setTimeFromTimeString($slot);
             $slotEnd = $date->copy()->setTimeFromTimeString($slot)->addHours($this->reservationDuration);
+
+            // Cannot select a time slot in the past
+            if ($slotStart->isBefore(now())) {
+                continue;
+            }
 
             $overlappingReservations = $reservations
                 ->where('starts_at', '<', $slotEnd)
@@ -121,6 +129,14 @@ class ReservationService
      */
     public function isTableAvailable(CarbonInterface $startsAt, CarbonInterface $endsAt): bool
     {
+        $availableTimeSlots = $this->getAvailableTimeSlotsForDate($startsAt);
+
+        // No available time slot
+        if (! $availableTimeSlots->contains($startsAt->toTimeString('minute'))) {
+            return false;
+        }
+
+        // No free table
         return Reservation::query()
             ->where(
                 fn (Builder $query) => $query
