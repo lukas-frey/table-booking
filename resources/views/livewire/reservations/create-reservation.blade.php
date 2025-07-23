@@ -14,6 +14,32 @@
             required
         />
 
+        <flux:field>
+            <flux:label>{{__('Select a date')}}</flux:label>
+            <div x-data="datepicker({
+                state:  $wire.entangle('date')
+            })"
+            class="w-full"
+            ></div>
+            <flux:error name="date"></flux:error>
+        </flux:field>
+
+        <flux:input
+            wire:model="time"
+            :label="__('Select a time')"
+            type="time"
+            step="1800"
+            min="12:00"
+            max="18:00"
+            list="timeslots"
+            required
+        />
+
+        <datalist id="timeslots">
+            <option value="12:00"></option>
+            <option value="12:30"></option>
+        </datalist>
+
         <div class="flex items-center justify-end">
             <flux:button variant="primary" type="submit" class="w-full">{{ __('Reserve table now') }}</flux:button>
         </div>

@@ -9,4 +9,10 @@ use Livewire\Component;
 class CreateReservation extends Component
 {
 
+    public int $guests = 2;
+
+    public ?string $date = null;
+
+    public ?string $time = null;
+
 }
