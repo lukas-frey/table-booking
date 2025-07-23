@@ -4,6 +4,7 @@ use App\Models\Reservation;
 use App\Services\ReservationService;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Once;
 
 beforeEach(function () {
     config([
@@ -154,4 +155,91 @@ it('correctly calculates available time slots for date', function () {
     expect($availableTimeSlotsFriday)->toBeEmpty();
     expect($availableTimeSlotsSaturday)->not->toBeEmpty();
     expect($availableTimeSlotsSunday)->toBeEmpty();
+});
+
+it('correctly determines time slot availability on time range edge', function () {
+    $service = app(ReservationService::class);
+
+    Reservation::factory()->count(config('app.max_tables'))->create([
+        'starts_at' => today()->setTimeFromTimeString('12:00'),
+        'ends_at' => today()->setTimeFromTimeString('14:00'),
+    ]);
+
+    Reservation::factory()->count(config('app.max_tables') - 1)->create([
+        'starts_at' => today()->setTimeFromTimeString('14:00'),
+        'ends_at' => today()->setTimeFromTimeString('16:00'),
+    ]);
+    Reservation::factory()->count(config('app.max_tables'))->create([
+        'starts_at' => today()->setTimeFromTimeString('16:00'),
+        'ends_at' => today()->setTimeFromTimeString('18:00'),
+    ]);
+    Reservation::factory()->count(config('app.max_tables'))->create([
+        'starts_at' => today()->setTimeFromTimeString('18:00'),
+        'ends_at' => today()->setTimeFromTimeString('20:00'),
+    ]);
+
+    $availableTimeSlots = $service->getAvailableTimeSlotsForDate(today());
+    expect($availableTimeSlots)->not->toBeEmpty();
+    expect($availableTimeSlots)->toContain('14:00');
+
+    Once::flush();
+
+    Reservation::factory()->create([
+        'starts_at' => today()->setTimeFromTimeString('14:00'),
+        'ends_at' => today()->setTimeFromTimeString('16:00'),
+    ]);
+
+    $availableTimeSlots = $service->getAvailableTimeSlotsForDate(today());
+    expect($availableTimeSlots)->toBeEmpty();
+});
+
+it('correctly determines table available in free time range', function () {
+    $service = app(ReservationService::class);
+
+    $startsAt = CarbonImmutable::parse('2025-07-25 14:00');
+    $endsAt = CarbonImmutable::parse('2025-07-25 16:00');
+
+    // No reservations
+    expect($service->isTableAvailable($startsAt, $endsAt))->toBeTrue();
+});
+
+it('correctly determines table un/available on time range edge', function () {
+    $service = app(ReservationService::class);
+
+    $startsAt = CarbonImmutable::parse('2025-07-24 14:00');
+    $endsAt = CarbonImmutable::parse('2025-07-24 16:00');
+
+    Reservation::factory()->count(config('app.max_tables'))->create([
+        'starts_at' => CarbonImmutable::parse('2025-07-24 12:00'),
+        'ends_at' => CarbonImmutable::parse('2025-07-24 14:00'),
+    ]);
+
+    expect($service->isTableAvailable($startsAt, $endsAt))->toBeTrue();
+
+    Reservation::factory()->count(config('app.max_tables'))->create([
+        'starts_at' => CarbonImmutable::parse('2025-07-24 16:00'),
+        'ends_at' => CarbonImmutable::parse('2025-07-24 18:00'),
+    ]);
+    expect($service->isTableAvailable($startsAt, $endsAt))->toBeTrue();
+});
+
+it('correctly determines table unavailable on time range edge with slight overlap', function () {
+    $service = app(ReservationService::class);
+
+    $startsAt = CarbonImmutable::parse('2025-07-24 14:00');
+    $endsAt = CarbonImmutable::parse('2025-07-24 16:00');
+
+    Reservation::factory()->count(config('app.max_tables'))->create([
+        'starts_at' => CarbonImmutable::parse('2025-07-24 12:01'),
+        'ends_at' => CarbonImmutable::parse('2025-07-24 14:01'),
+    ]);
+
+    expect($service->isTableAvailable($startsAt, $endsAt))->toBeFalse();
+
+    Reservation::factory()->count(config('app.max_tables'))->create([
+        'starts_at' => CarbonImmutable::parse('2025-07-24 15:59'),
+        'ends_at' => CarbonImmutable::parse('2025-07-24 17:59'),
+    ]);
+
+    expect($service->isTableAvailable($startsAt, $endsAt))->toBeFalse();
 });

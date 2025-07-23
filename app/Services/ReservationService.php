@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Carbon\CarbonPeriod;
 use Carbon\WeekDay;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class ReservationService
@@ -92,28 +93,46 @@ class ReservationService
         return collect();
     }
 
-    /**
-     * Get the available time slots for the specified date based on the restaurant's schedule.
-     */
     public function getAvailableTimeSlotsForDate(CarbonInterface $date, string $period = '30 minutes'): Collection
     {
+        $availableSlots = collect();
         $reservations = $this->getReservations();
 
-        return $this->getTimeSlotsForDate($date, $period)
-            ->filter(
-                fn (string $slot) => $reservations
-                    ->whereBetween('starts_at', [
-                        Carbon::parse($date)->setTimeFromTimeString($slot),
-                        Carbon::parse($date)->setTimeFromTimeString($slot)->addHours($this->reservationDuration),
-                    ])->count() < $this->maxTables
+        foreach ($this->getTimeSlotsForDate($date) as $slot) {
+            $slotStart = $date->copy()->setTimeFromTimeString($slot);
+            $slotEnd = $date->copy()->setTimeFromTimeString($slot)->addHours($this->reservationDuration);
+
+            $overlappingReservations = $reservations
+                ->where('starts_at', '<', $slotEnd)
+                ->where('ends_at', '>', $slotStart)
+                ->count()
+            ;
+
+            if ($overlappingReservations < $this->maxTables) {
+                $availableSlots->push($slot);
+            }
+        }
+
+        return $availableSlots;
+    }
+
+    /**
+     * Checks if a table is still available within the specified time range.
+     */
+    public function isTableAvailable(CarbonInterface $startsAt, CarbonInterface $endsAt): bool
+    {
+        return Reservation::query()
+            ->where(
+                fn (Builder $query) => $query
+                    ->where('starts_at', '<', $endsAt)
+                    ->where('ends_at', '>', $startsAt)
             )
-            ->filter(
-                fn (string $slot) => $reservations
-                    ->whereBetween('ends_at', [
-                        Carbon::parse($date)->setTimeFromTimeString($slot),
-                        Carbon::parse($date)->setTimeFromTimeString($slot)->addHours($this->reservationDuration),
-                    ])->count() < $this->maxTables
+            ->orWhere(
+                fn (Builder $query) => $query
+                    ->where('ends_at', '>', $startsAt)
+                    ->where('starts_at', '<', $endsAt)
             )
+            ->count() < $this->maxTables
         ;
     }
 
