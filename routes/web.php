@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Reservations\CreateReservation;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
@@ -11,7 +12,13 @@ Route::get('/', function () {
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+    ->name('dashboard')
+;
+
+Route::get('reservations/create', CreateReservation::class)
+    ->middleware(['auth', 'verified'])
+    ->name('reservations.create')
+;
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
@@ -21,4 +28,4 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
