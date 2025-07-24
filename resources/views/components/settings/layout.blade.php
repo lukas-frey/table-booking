@@ -3,7 +3,6 @@
         <flux:navbar>
             <flux:navbar.item :href="route('settings.profile')" wire:navigate>{{ __('Profile') }}</flux:navbar.item>
             <flux:navbar.item :href="route('settings.password')" wire:navigate>{{ __('Password') }}</flux:navbar.item>
-{{--            <flux:navbar.item :href="route('settings.appearance')" wire:navigate>{{ __('Appearance') }}</flux:navbar.item>--}}
         </flux:navbar>
     </div>
 

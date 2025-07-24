@@ -8,18 +8,10 @@ use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/', function () {
-//    return view('welcome');
-// })->name('home');
-
-Route::view('/', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('home')
-;
-
 Route::middleware(['auth', 'verified'])
     ->group(function () {
-        Route::get('reservations', ListReservations::class)
+
+        Route::get('/', ListReservations::class)
             ->name('reservations.index')
         ;
 

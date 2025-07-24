@@ -64,7 +64,7 @@ class Profile extends Component
         $user = Auth::user();
 
         if ($user->hasVerifiedEmail()) {
-            $this->redirectIntended(default: route('home', absolute: false));
+            $this->redirectIntended(default: route('reservations.index', absolute: false));
 
             return;
         }

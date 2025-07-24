@@ -7,12 +7,12 @@
     <flux:header container class="border-b border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
         <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
 
-        <a href="{{ route('home') }}" class="ms-2 me-5 flex items-center space-x-2 rtl:space-x-reverse lg:ms-0" wire:navigate>
+        <a href="{{ route('reservations.index') }}" class="ms-2 me-5 flex items-center space-x-2 rtl:space-x-reverse lg:ms-0" wire:navigate>
             <x-app-logo />
         </a>
 
         <flux:navbar class="-mb-px max-lg:hidden">
-            <flux:navbar.item icon="layout-grid" :href="route('home')" :current="request()->routeIs('dashboard')" wire:navigate>
+            <flux:navbar.item icon="layout-grid" :href="route('reservations.index')" :current="request()->routeIs('dashboard')" wire:navigate>
                 {{ __('Dashboard') }}
             </flux:navbar.item>
         </flux:navbar>
@@ -67,7 +67,7 @@
 
     <div class="bg-background flex min-h-svh flex-col items-center justify-start gap-6 p-6 md:p-10">
             <div class="flex w-full max-w-sm flex-col gap-2">
-                <a href="{{ route('home') }}" class="flex flex-col items-center gap-2 font-medium" wire:navigate>
+                <a href="{{ route('reservations.index') }}" class="flex flex-col items-center gap-2 font-medium" wire:navigate>
                     <span class="flex h-9 w-9 mb-1 items-center justify-center rounded-md">
                         <x-app-logo-icon class="size-9 fill-current text-black dark:text-white" />
                     </span>

@@ -17,7 +17,7 @@ class VerifyEmail extends Component
     public function sendVerification(): void
     {
         if (Auth::user()->hasVerifiedEmail()) {
-            $this->redirectIntended(default: route('home', absolute: false), navigate: true);
+            $this->redirectIntended(default: route('reservations.index', absolute: false), navigate: true);
 
             return;
         }
