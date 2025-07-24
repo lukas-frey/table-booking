@@ -1,5 +1,9 @@
 <div class="flex flex-col gap-6">
-    <x-heading :title="__('Create an account')" :description="__('Enter your details below to create your account')" />
+    <x-heading
+        :title="__('Create an account')"
+        :description="__('Enter your details below to create your account')"
+        variant="auth"
+    />
 
     <!-- Session Status -->
     <x-auth-session-status class="text-center" :status="session('status')" />

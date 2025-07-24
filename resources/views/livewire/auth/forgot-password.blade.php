@@ -1,5 +1,9 @@
  <div class="flex flex-col gap-6">
-    <x-heading :title="__('Forgot password')" :description="__('Enter your email to receive a password reset link')" />
+    <x-heading
+        :title="__('Forgot password')"
+        :description="__('Enter your email to receive a password reset link')"
+        variant="auth"
+    />
 
     <!-- Session Status -->
     <x-auth-session-status class="text-center" :status="session('status')" />

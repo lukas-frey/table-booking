@@ -2,6 +2,7 @@
     <x-heading
         :title="__('Confirm password')"
         :description="__('This is a secure area of the application. Please confirm your password before continuing.')"
+        variant="auth"
     />
 
     <!-- Session Status -->
