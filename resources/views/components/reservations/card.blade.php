@@ -11,10 +11,10 @@
         <flux:heading class="w-full flex items-center justify-between gap-2">
             <span @class(['line-through' => $reservation->cancelled_at])>{{$reservation->starts_at->format('j. n. Y')}}</span>
 
-            @if(now()->isBetween($reservation->starts_at, $reservation->ends_at))
-                <flux:badge size="sm" color="lime">{{__('Ongoing')}}</flux:badge>
-            @elseif($reservation->cancelled_at)
+            @if($reservation->cancelled_at)
                 <flux:badge size="sm">{{__('Cancelled')}}</flux:badge>
+            @elseif(now()->isBetween($reservation->starts_at, $reservation->ends_at))
+                <flux:badge size="sm" color="lime">{{__('Ongoing')}}</flux:badge>
             @endif
         </flux:heading>
         <div class="flex flex-row flex-wrap gap-4">
