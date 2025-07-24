@@ -84,9 +84,9 @@
 
         <flux:navlist variant="outline">
             <flux:navlist.group :heading="__('Platform')">
-                <flux:navlist.item icon="layout-grid" :href="route('reservations.index')" :current="request()->routeIs('dashboard')"
+                <flux:navlist.item icon="clock" :href="route('reservations.index')" :current="request()->routeIs('reservations*')"
                                    wire:navigate>
-                    {{ __('Dashboard') }}
+                    {{ __('Reservations') }}
                 </flux:navlist.item>
             </flux:navlist.group>
         </flux:navlist>
