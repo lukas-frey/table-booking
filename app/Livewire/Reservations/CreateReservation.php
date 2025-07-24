@@ -43,6 +43,11 @@ class CreateReservation extends Component
         $value = $value?->setTimezone('Europe/Prague');
     }
 
+    public function updatedDate(): void
+    {
+        $this->time = null;
+    }
+
     public function createReservation(): void
     {
         $data = $this->validate();
