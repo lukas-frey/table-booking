@@ -25,6 +25,7 @@ class ReservationFactory extends Factory
             'guests' => $this->faker->numberBetween(1, config('app.seats_per_table')),
             'starts_at' => $startsAt,
             'ends_at' => $endsAt,
+            'cancelled_at' => null,
             'user_id' => User::factory(),
         ];
     }

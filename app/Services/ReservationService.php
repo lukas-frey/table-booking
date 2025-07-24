@@ -138,15 +138,19 @@ class ReservationService
 
         // No free table
         return Reservation::query()
+            ->whereNull('cancelled_at')
             ->where(
-                fn (Builder $query) => $query
-                    ->where('starts_at', '<', $endsAt)
-                    ->where('ends_at', '>', $startsAt)
-            )
-            ->orWhere(
-                fn (Builder $query) => $query
-                    ->where('ends_at', '>', $startsAt)
-                    ->where('starts_at', '<', $endsAt)
+                static fn (Builder $query) => $query
+                    ->where(
+                        fn (Builder $query) => $query
+                            ->where('starts_at', '<', $endsAt)
+                            ->where('ends_at', '>', $startsAt)
+                    )
+                    ->orWhere(
+                        fn (Builder $query) => $query
+                            ->where('ends_at', '>', $startsAt)
+                            ->where('starts_at', '<', $endsAt)
+                    )
             )
             ->count() < $this->maxTables
         ;
@@ -161,6 +165,7 @@ class ReservationService
     {
         return once(
             fn () => Reservation::query()
+                ->whereNull('cancelled_at')
                 ->whereBetween('starts_at', [$this->startDate, $this->endDate])
                 ->get()
         );

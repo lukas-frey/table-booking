@@ -243,3 +243,34 @@ it('correctly determines table unavailable on time range edge with slight overla
 
     expect($service->isTableAvailable($startsAt, $endsAt))->toBeFalse();
 });
+
+it('correctly frees up space when reservation is cancelled', function () {
+    config([
+        'app.schedule.monday' => '12:00-14:00',
+    ]);
+
+    $start = today()->setTimeFromTimeString('12:00');
+    $end = today()->setTimeFromTimeString('14:00');
+
+    Reservation::factory()->count(config('app.max_tables'))->create([
+        'starts_at' => $start,
+        'ends_at' => $end,
+    ]);
+
+    $service = app(ReservationService::class);
+
+    $availableTimeSlots = $service->getAvailableTimeSlotsForDate(today());
+
+    expect($availableTimeSlots)->toBeEmpty();
+    expect($service->isTableAvailable($start, $end))->toBeFalse();
+
+    Reservation::first()->update(['cancelled_at' => now()]);
+
+    Once::flush();
+
+    $availableTimeSlots = $service->getAvailableTimeSlotsForDate(today());
+
+    expect($availableTimeSlots)->not->toBeEmpty();
+    expect($availableTimeSlots)->toContain('12:00');
+    expect($service->isTableAvailable($start, $end))->toBeTrue();
+});

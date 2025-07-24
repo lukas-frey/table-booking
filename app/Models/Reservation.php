@@ -15,6 +15,7 @@ class Reservation extends Model
         'guests',
         'starts_at',
         'ends_at',
+        'cancelled_at',
         'user_id',
     ];
 
@@ -23,6 +24,7 @@ class Reservation extends Model
         return [
             'starts_at' => 'datetime',
             'ends_at' => 'datetime',
+            'cancelled_at' => 'datetime',
         ];
     }
 
