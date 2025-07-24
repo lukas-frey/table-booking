@@ -65,3 +65,36 @@ select:focus[data-flux-control] {
 /* \[:where(&)\]:size-4 {
     @apply size-4;
 } */
+
+.air-datepicker {
+    --adp-width: 100%;
+    --adp-day-name-color: var(--color-zinc-600);
+    --adp-cell-background-color-selected: var(--color-accent);
+    --adp-cell-background-color-selected-hover: var(--color-accent);
+    --adp-color-current-date: var(--color-accent-content);
+    --adp-background-color: transparent;
+    --adp-color: var(--color-zinc-600);
+    --adp-color-disabled: var(--color-zinc-400);
+    --adp-color-other-month: var(--color-zinc-300);
+
+    border: none;
+}
+.dark .air-datepicker {
+    --adp-day-name-color: var(--color-zinc-500);
+    --adp-color: var(--color-zinc-400);
+    --adp-color-disabled: var(--color-zinc-600);
+    --adp-color-other-month: var(--color-zinc-700);
+
+}
+
+.air-datepicker-nav {
+    @apply border-none;
+}
+
+.air-datepicker-body--cells.-days- {
+    @apply auto-rows-auto;
+}
+
+.air-datepicker-cell {
+    @apply aspect-square h-auto;
+}
