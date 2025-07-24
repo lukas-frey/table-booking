@@ -98,3 +98,22 @@ select:focus[data-flux-control] {
 .air-datepicker-cell {
     @apply aspect-square h-auto;
 }
+
+[data-flux-radio-group].radio-buttons {
+    & [data-flux-field] {
+        @apply flex justify-center h-8 m-0;
+    }
+
+    & [data-flux-radio] {
+        @apply hidden;
+    }
+
+    & [data-flux-label] {
+        @apply grid text-center bg-white hover:bg-zinc-50 dark:bg-zinc-700 dark:hover:bg-zinc-600 w-full rounded-md border border-zinc-200 hover:border-zinc-200 border-b-zinc-300/80 dark:border-zinc-600 dark:hover:border-zinc-600 shadow-xs;
+    }
+
+    & [data-flux-radio][data-checked] + [data-flux-label] {
+        background-color: var(--color-accent) !important;
+        color: white !important;
+    }
+}

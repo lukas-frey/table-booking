@@ -33,7 +33,7 @@
         <!-- Time -->
         <flux:radio.group wire:model="time"
                           :label="__('Select a time')"
-                          class="w-full grid grid-cols-4 gap-1.5"
+                          class="radio-buttons w-full grid grid-cols-4 gap-1.5"
         >
             @forelse ($this->getAvailableTimeSlotsForSelectedDate() as $timeSlot)
                 <flux:radio value="{{$timeSlot}}" :label="$timeSlot" class="peer"/>
