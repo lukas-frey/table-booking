@@ -2,6 +2,7 @@
     <x-heading
         :title="__('Thank you for your reservation!')"
         :description="__('Please check your e-mail for the confirmation of your reservation.')"
+        variant="auth"
     />
 
     <flux:callout>
@@ -23,4 +24,9 @@
             </div>
         </flux:callout.text>
     </flux:callout>
+
+    <div class="flex justify-end space-x-2">
+        <flux:button href="{{route('reservations.create')}}" variant="subtle">{{ __('Create another') }}</flux:button>
+        <flux:button href="{{route('reservations.index')}}">{{ __('View reservations') }}</flux:button>
+    </div>
 </div>
