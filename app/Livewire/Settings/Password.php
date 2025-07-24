@@ -9,7 +9,6 @@ use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
-#[Layout('components.layouts.auth.simple')]
 class Password extends Component
 {
     public string $current_password = '';
