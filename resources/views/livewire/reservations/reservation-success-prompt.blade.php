@@ -1,5 +1,5 @@
 <div class="flex flex-col gap-6">
-    <x-auth-header
+    <x-heading
         :title="__('Thank you for your reservation!')"
         :description="__('Please check your e-mail for the confirmation of your reservation.')"
     />

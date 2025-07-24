@@ -1,5 +1,5 @@
 <div class="flex flex-col gap-6">
-    <x-auth-header :title="__('Make a reservation')"
+    <x-heading :title="__('Make a reservation')"
                    :description="__('Please fill out the form below to reserve a table')"
     />
 

@@ -2,7 +2,5 @@
     'centered' => false
 ])
 <x-layouts.app.base :title="$title ?? null" :centered="$centered">
-{{--    <flux:main>--}}
-        {{ $slot }}
-{{--    </flux:main>--}}
+    {{ $slot }}
 </x-layouts.app.base>
