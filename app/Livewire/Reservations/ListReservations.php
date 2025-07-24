@@ -15,7 +15,7 @@ class ListReservations extends Component
     {
         $this->reservationsGroupedByDate = Reservation::query()
             ->with(['user'])
-            ->whereFuture('starts_at')
+            ->whereFuture('ends_at')
             ->whereBelongsTo(auth()->user())
             ->orderBy('starts_at')
             ->get()
@@ -23,14 +23,5 @@ class ListReservations extends Component
             ->groupBy(static fn (Reservation $reservation) => $reservation->starts_at->toDateString(), true)
         ;
 
-    }
-
-    public function render(): View
-    {
-        return view('livewire.reservations.list-reservations')
-            ->layout('components.layouts.app', [
-                'centered' => $this->reservationsGroupedByDate->isEmpty(),
-            ])
-        ;
     }
 }
