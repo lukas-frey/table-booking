@@ -1,23 +1,28 @@
 <?php
 
 use App\Livewire\Reservations\CreateReservation;
+use App\Livewire\Reservations\ListReservations;
 use App\Livewire\Reservations\ReservationSuccessPrompt;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+// Route::get('/', function () {
+//    return view('welcome');
+// })->name('home');
 
-Route::view('dashboard', 'dashboard')
+Route::view('/', 'dashboard')
     ->middleware(['auth', 'verified'])
-    ->name('dashboard')
+    ->name('home')
 ;
 
 Route::middleware(['auth', 'verified'])
     ->group(function () {
+        Route::get('reservations', ListReservations::class)
+            ->name('reservations.index')
+        ;
+
         Route::get('reservations/create', CreateReservation::class)
             ->name('reservations.create')
         ;
@@ -33,7 +38,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('settings/profile', Profile::class)->name('settings.profile');
     Route::get('settings/password', Password::class)->name('settings.password');
-    Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
+    //    Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
 });
 
 require __DIR__ . '/auth.php';
