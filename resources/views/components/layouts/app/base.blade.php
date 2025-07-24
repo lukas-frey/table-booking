@@ -19,9 +19,9 @@
         </a>
 
         <flux:navbar class="-mb-px max-lg:hidden">
-            <flux:navbar.item icon="layout-grid" :href="route('reservations.index')" :current="request()->routeIs('dashboard')"
+            <flux:navbar.item icon="clock" :href="route('reservations.index')" :current="request()->routeIs('reservations*')"
                               wire:navigate>
-                {{ __('Dashboard') }}
+                {{ __('Reservations') }}
             </flux:navbar.item>
         </flux:navbar>
 
@@ -98,7 +98,7 @@
 <div @class([
     "bg-background flex min-h-svh flex-col items-center gap-6 p-6 md:p-10",
     "justify-center" => $centered || ! $withHeader,
-    "-mt-14" => $centered && $withHeader,
+    "-mt-14 pt-20! md:pt-24!" => $withHeader,
 ])>
     <div class="flex w-full max-w-sm flex-col gap-2">
         <div class="flex flex-col gap-6">
