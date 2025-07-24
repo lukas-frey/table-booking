@@ -11,7 +11,6 @@ use Illuminate\Validation\Rule;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
-#[Layout('components.layouts.auth')]
 class CreateReservation extends Component
 {
     public int $guests = 2;
