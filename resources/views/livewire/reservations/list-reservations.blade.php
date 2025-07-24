@@ -43,7 +43,7 @@
             @foreach($reservationsGroupedByDate as $date => $reservations)
                 <x-timeline.item :date="$date">
                     @foreach($reservations as $reservation)
-                        <x-reservations.reservation-card :reservation="$reservation"/>
+                        <x-reservations.card :reservation="$reservation"/>
                     @endforeach
                 </x-timeline.item>
             @endforeach
