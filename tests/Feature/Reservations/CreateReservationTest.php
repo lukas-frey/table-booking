@@ -85,3 +85,16 @@ it('can not reserve a table for invalid date', function () {
         ->assertHasErrors()
     ;
 });
+
+it('can not reserve a table for invalid time', function () {
+    $this->actingAs(User::factory()->create());
+
+    livewire(CreateReservation::class)
+        ->fill([
+            'date' => today(),
+            'time' => '10:00',
+        ])
+        ->call('createReservation')
+        ->assertHasErrors()
+    ;
+});

@@ -36,6 +36,7 @@ it('can see own reservations', function () {
     $user = User::factory()->create();
     $this->actingAs($user);
 
+    // Own reservations
     Reservation::factory()
         ->recycle($user)
         ->createMany([
@@ -44,6 +45,8 @@ it('can see own reservations', function () {
             ['starts_at' => '2025-07-22 13:00', 'ends_at' => '2025-07-22 15:00'],
         ])
     ;
+
+    // Other reservations
     Reservation::factory()
         ->createMany([
             ['starts_at' => '2025-07-21 12:00', 'ends_at' => '2025-07-21 14:00'],

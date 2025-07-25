@@ -29,6 +29,9 @@ it('can not cancel reservation when not logged in', function () {
     ]))
         ->assertRedirect(route('login'))
     ;
+
+    $reservation->refresh();
+    expect($reservation->cancelled_at)->toBeNull();
 });
 
 it('can not cancel someone else\'s reservation', function () {

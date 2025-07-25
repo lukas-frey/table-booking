@@ -3,10 +3,8 @@
 use App\Livewire\Auth\Register;
 use Livewire\Livewire;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
-
 test('registration screen can be rendered', function () {
-    $response = $this->get('/register');
+    $response = $this->get(route('register'));
 
     $response->assertStatus(200);
 });
@@ -21,7 +19,7 @@ test('new users can register', function () {
 
     $response
         ->assertHasNoErrors()
-        ->assertRedirect(route('dashboard', absolute: false));
+        ->assertRedirect(route('reservations.index', absolute: false));
 
     $this->assertAuthenticated();
 });
