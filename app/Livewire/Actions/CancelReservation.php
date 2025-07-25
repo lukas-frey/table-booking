@@ -3,6 +3,7 @@
 namespace App\Livewire\Actions;
 
 use App\Models\Reservation;
+use App\Notifications\ReservationCancellationConfirmation;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,6 +18,8 @@ class CancelReservation
         $reservation->update([
             'cancelled_at' => now(),
         ]);
+
+        auth()->user()->notify(new ReservationCancellationConfirmation($reservation));
 
         return back();
     }

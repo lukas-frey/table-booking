@@ -7,6 +7,7 @@ use App\Livewire\Reservations\ReservationSuccessPrompt;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 use App\Models\Reservation;
+use App\Notifications\ReservationCancellationConfirmation;
 use App\Notifications\ReservationConfirmation;
 use Illuminate\Support\Facades\Route;
 
@@ -42,7 +43,14 @@ if (app()->isLocal()) {
     Route::get('/mails/reservation-confirmation/{reservation}', function (Reservation $reservation) {
         return (new ReservationConfirmation($reservation))
             ->toMail($reservation->user)
-        ;
+            ;
+    });
+
+
+    Route::get('/mails/reservation-cancellation-confirmation/{reservation}', function (Reservation $reservation) {
+        return (new ReservationCancellationConfirmation($reservation))
+            ->toMail($reservation->user)
+            ;
     });
 }
 
