@@ -30,13 +30,13 @@
         </div>
 
         @if(!$reservation->cancelled_at && ! now()->isBetween($reservation->starts_at, $reservation->ends_at))
-            <flux:modal.trigger name="confirm-reservation-cancellation">
+            <flux:modal.trigger name="cancel-reservation-{{$reservation->getKey()}}">
                 <flux:button size="sm" type="submit" icon="x-circle" class="text-sm mr-auto">
                     {{__('Cancel reservation')}}
                 </flux:button>
             </flux:modal.trigger>
 
-            <flux:modal name="confirm-reservation-cancellation" :show="$errors->isNotEmpty()" focusable class="max-w-lg">
+            <flux:modal name="cancel-reservation-{{$reservation->getKey()}}" :show="$errors->isNotEmpty()" focusable class="max-w-lg">
                 <form method="POST" action="{{route('reservations.cancel', ['reservation' => $reservation])}}" class="space-y-6">
                     @csrf
                     <div>
