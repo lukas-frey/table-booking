@@ -2,10 +2,26 @@
     'reservation'
 ])
 
-<flux:callout @class([
-    "w-full mb-4 group-last:last:mb-0",
-    "border-dashed opacity-50" => $reservation->cancelled_at
-])>
+<flux:callout
+    @class([
+        "w-full mb-4 group-last:last:mb-0",
+        "data-highlight:animate-highlight data-highlight:border-rose-400 data-highlight:bg-rose-50 dark:data-highlight:border-rose-400/20 dark:data-highlight:bg-rose-500/20",
+        "border-dashed opacity-50" => $reservation->cancelled_at
+    ])
+    wire:key="reservation-{{$reservation->getKey()}}"
+    id="reservation-{{$reservation->getKey()}}"
+    x-data="{
+        animate: (element) => {
+            if (window.location.hash === '#reservation-{{$reservation->getKey()}}') {
+                element.setAttribute('data-highlight', 'data-highlight')
+            } else {
+                element.removeAttribute('data-highlight')
+            }
+        }
+    }"
+    x-init="animate($el)"
+    x-on:hashchange.window="animate($el)"
+>
     <div class="flex flex-col gap-2">
 
         <flux:heading class="w-full flex items-center justify-between gap-2">
@@ -36,11 +52,14 @@
                 </flux:button>
             </flux:modal.trigger>
 
-            <flux:modal name="cancel-reservation-{{$reservation->getKey()}}" :show="$errors->isNotEmpty()" focusable class="max-w-lg">
-                <form method="POST" action="{{route('reservations.cancel', ['reservation' => $reservation])}}" class="space-y-6">
+            <flux:modal name="cancel-reservation-{{$reservation->getKey()}}" :show="$errors->isNotEmpty()" focusable
+                        class="max-w-lg">
+                <form method="POST" action="{{route('reservations.cancel', ['reservation' => $reservation])}}"
+                      class="space-y-6">
                     @csrf
                     <div>
-                        <flux:heading size="lg">{{ __('Are you sure you want to cancel your reservation?') }}</flux:heading>
+                        <flux:heading
+                            size="lg">{{ __('Are you sure you want to cancel your reservation?') }}</flux:heading>
 
                         <flux:subheading>
                             {{ __('Once the reservation is cancelled, it can no longer be reversed.') }}
