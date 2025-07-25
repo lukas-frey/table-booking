@@ -27,6 +27,6 @@
 
     <div class="flex justify-end space-x-2">
         <flux:button href="{{route('reservations.create')}}" variant="subtle">{{ __('Create another') }}</flux:button>
-        <flux:button href="{{route('reservations.index')}}">{{ __('View reservations') }}</flux:button>
+        <flux:button href="{{route('reservations.index') . '#reservation-'.$this->reservation->getKey()}}">{{ __('View reservation') }}</flux:button>
     </div>
 </div>

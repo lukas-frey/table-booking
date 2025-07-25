@@ -6,6 +6,8 @@ use App\Livewire\Reservations\ListReservations;
 use App\Livewire\Reservations\ReservationSuccessPrompt;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
+use App\Models\Reservation;
+use App\Notifications\ReservationConfirmation;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified'])
@@ -25,7 +27,7 @@ Route::middleware(['auth', 'verified'])
 
         Route::post('reservations/{reservation}/cancel', CancelReservation::class)
             ->name('reservations.cancel')
-            ;
+        ;
     })
 ;
 
@@ -35,5 +37,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/profile', Profile::class)->name('settings.profile');
     Route::get('settings/password', Password::class)->name('settings.password');
 });
+
+if (app()->isLocal()) {
+    Route::get('/mails/reservation-confirmation/{reservation}', function (Reservation $reservation) {
+        return (new ReservationConfirmation($reservation))
+            ->toMail($reservation->user)
+        ;
+    });
+}
 
 require __DIR__ . '/auth.php';

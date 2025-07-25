@@ -3,6 +3,7 @@
 namespace App\Livewire\Reservations;
 
 use App\Models\Reservation;
+use App\Notifications\ReservationConfirmation;
 use App\Services\ReservationService;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Carbon;
@@ -72,6 +73,8 @@ class CreateReservation extends Component
                     'user_id' => auth()->id(),
                 ])
         ) {
+            auth()->user()->notify(new ReservationConfirmation($reservation));
+
             $this->redirect(route('reservations.success', [
                 'reservation' => $reservation,
             ]));

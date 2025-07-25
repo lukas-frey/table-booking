@@ -3,7 +3,9 @@
 use App\Livewire\Reservations\CreateReservation;
 use App\Models\Reservation;
 use App\Models\User;
+use App\Notifications\ReservationConfirmation;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Notification;
 
 use function Pest\Livewire\livewire;
 
@@ -53,7 +55,9 @@ it('can render create reservation screen as verified user', function () {
 });
 
 it('can reserve a table', function () {
-    $this->actingAs(User::factory()->create());
+    $this->actingAs($user = User::factory()->create());
+
+    Notification::fake();
 
     livewire(CreateReservation::class)
         ->call('createReservation')
@@ -71,10 +75,16 @@ it('can reserve a table', function () {
             'reservation' => Reservation::query()->first(),
         ]))
     ;
+
+    Notification::assertSentTo(
+        [$user], ReservationConfirmation::class
+    );
 });
 
 it('can not reserve a table for invalid date', function () {
     $this->actingAs(User::factory()->create());
+
+    Notification::fake();
 
     livewire(CreateReservation::class)
         ->fill([
@@ -84,10 +94,14 @@ it('can not reserve a table for invalid date', function () {
         ->call('createReservation')
         ->assertHasErrors()
     ;
+
+    Notification::assertNothingSent();
 });
 
 it('can not reserve a table for invalid time', function () {
     $this->actingAs(User::factory()->create());
+
+    Notification::fake();
 
     livewire(CreateReservation::class)
         ->fill([
@@ -97,4 +111,6 @@ it('can not reserve a table for invalid time', function () {
         ->call('createReservation')
         ->assertHasErrors()
     ;
+
+    Notification::assertNothingSent();
 });
